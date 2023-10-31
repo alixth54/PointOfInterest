@@ -12,20 +12,20 @@ document.addEventListener('DOMContentLoaded', (event) => {
         databaseJson = json;
         for (let i = 0; i<databaseJson.incidents.length;i++) {
             createMarker(databaseJson.incidents[i]);
-            
+
         }
       
         
     });
 });
-const southWest = L.latLng(48.599861, 6.080953),
-    northEast = L.latLng(48.739119, 6.348551),
-    bounds = new L.latLngBounds(southWest, northEast);
+let latLongMin = L.latLng(48.677675, 6.158160),
+    latLongMax = L.latLng(48.701081, 6.206054),
+    bounds = new L.latLngBounds(latLongMin, latLongMax);
     // .setView([48.693463, 6.183167], 14)
 
 let map = L.map('map');
-map.setView([48.693463, 6.193167], 15);
-map.fitBounds(bounds);
+map.setView([48.693463, 6.193167], 14);
+// map.fitBounds(bounds);
 L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
     maxZoom: 19,
     attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
@@ -40,6 +40,9 @@ function createMarker (coordinates){
     let arrayCoordinates = coordinates.location.polyline.split(" ", 2);
     let lat = arrayCoordinates[0];
     let long =arrayCoordinates[1];
+    boundMapMaxMin(lat,long);
+   
+ 
     let arrayOrange =['gêne','réduction','alternée'];
     let arrayRed =['barrée','suppression','suppression'];
     let arrayBlue =['stationnement interdit','stationement difficile','stationement difficile'];
@@ -108,3 +111,21 @@ function createMarker (coordinates){
     }
    
 
+function boundMapMaxMin(lat,long){
+   if(latLongMin.lat > lat) {
+    latLongMin.lat = lat;
+   }
+   if(latLongMax.lat < lat) {
+    latLongMax.lat = lat;
+   }
+   if(latLongMin.lng > long) {
+    latLongMin.lng = long;
+   }
+   if(latLongMax.lng < long) {
+    latLongMax.lng = long;
+   }
+   bounds = new L.latLngBounds(latLongMin, latLongMax);
+map.fitBounds(bounds);
+   console.log(bounds);
+   map.setMaxBounds(bounds);
+}
