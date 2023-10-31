@@ -44,13 +44,16 @@ function createCard(index) {
     title.classList.add('cardTitle');
     let pStart = document.createElement('p');
     let startTime = new Date(databaseJson.incidents[index].starttime);
-    pStart.innerText ='Début chantier : ' +startTime.getDate()+' / ' + startTime.getMonth() + ' / ' + startTime.getFullYear();
+    let correctStartMonth = startTime.getMonth() +1; 
+    pStart.innerText ='Début chantier : ' +startTime.getDate()+' / ' + correctStartMonth + ' / ' + startTime.getFullYear();
     let pEnd = document.createElement('p');
     let endTime = new Date(databaseJson.incidents[index].endtime);
-    pEnd.innerText ='Fin chantier : ' +endTime.getDate()+' / ' + endTime.getMonth() + ' / ' + endTime.getFullYear();
+    let correctEndMonth = endTime.getMonth() +1;
+    pEnd.innerText ='Fin chantier : ' +endTime.getDate()+' / ' + correctEndMonth + ' / ' + endTime.getFullYear();
     let pUpdate = document.createElement('p');
     let upDate = new Date(databaseJson.incidents[index].updatetime);
-    pUpdate.innerText ='Dernière mise à jour : ' +upDate.getDate()+' / ' + upDate.getMonth() + ' / ' + upDate.getFullYear(); 
+    let correctUpdate = upDate.getMonth();
+    pUpdate.innerText ='Dernière mise à jour : ' +upDate.getDate()+' / ' + correctUpdate + ' / ' + upDate.getFullYear(); 
     let buttonSignal = document.createElement('button');
     buttonSignal.classList.add('cardButton');
     buttonSignal.innerText = 'Signaler un problème';
@@ -126,7 +129,28 @@ function createMarker (index,coordinates){
                     }
             }
         } else {
-            let marker = L.marker([lat, long]).addTo(map);
+        let marker = L.marker([lat, long]).addTo(map);
+        
+        let futureProjects = document.getElementById('futureProjects');
+        let article = document.createElement('article'); 
+        article.classList.add('futureTask');  
+        let title = document.createElement('h3');
+        title.classList.add('projectTitle');
+        let pStart = document.createElement('p');
+        let startTime = new Date(databaseJson.incidents[index].starttime);
+        let correctStartMonth = startTime.getMonth() +1; 
+        pStart.innerText ='Début chantier : ' +startTime.getDate()+' / ' + correctStartMonth + ' / ' + startTime.getFullYear();
+        let pEnd = document.createElement('p');
+        let endTime = new Date(databaseJson.incidents[index].endtime);
+        let correctEndMonth = endTime.getMonth() +1;
+        pEnd.innerText ='Fin chantier : ' +endTime.getDate()+' / ' + correctEndMonth  + ' / ' + endTime.getFullYear();
+        let pUpdate = document.createElement('p');
+        article.append(title,pStart,pEnd);
+    
+        title.innerText = databaseJson.incidents[index].description;
+        futureProjects.append(article);
+        console.log(article);
+            
             
         }   
     }
@@ -161,7 +185,7 @@ function compareDates (startDate, currentDate, endDate){
   };
   
 
-}
+
 // recherche par nom de rue
 
 
