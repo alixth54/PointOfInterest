@@ -1,8 +1,9 @@
-//48.693463, 6.183167
+
 let databaseJson;
 let startDay, startMonth, startYear;
 let endDate, endDay, endMonth, endYear;
 let majDate, majDay, majMonth, majYear;
+
 document.addEventListener('DOMContentLoaded', (event) => {
     fetch('https://carto.g-ny.org/data/cifs/cifs_waze_v2.json')
     .then((response) => {
@@ -12,11 +13,12 @@ document.addEventListener('DOMContentLoaded', (event) => {
         databaseJson = json;
         for (let i = 0; i<databaseJson.incidents.length;i++) {
             createMarker(databaseJson.incidents[i]);
-
+            
         }
-      
+        
         
     });
+
 });
 let latLongMin = L.latLng(48.677675, 6.158160),
     latLongMax = L.latLng(48.701081, 6.206054),
@@ -126,6 +128,36 @@ function boundMapMaxMin(lat,long){
    }
    bounds = new L.latLngBounds(latLongMin, latLongMax);
 map.fitBounds(bounds);
-   console.log(bounds);
+   
    map.setMaxBounds(bounds);
+
 }
+// recherche par nom de rue
+
+
+    
+function searching(){
+    let elementInput= document.getElementById('searchBar').value;  // recuperation donnée taper dans barre recherche
+    document.getElementById('listSearch').innerHTML = '';
+    
+    for (let i = 0; i<databaseJson.incidents.length;i++) {
+        let elementList=databaseJson.incidents[i].location.location_description;
+
+    
+        if(elementList.indexOf(elementInput.toUpperCase()) !=-1 ){ 
+           let List= document.createElement('li');
+           List.classList.add('dropList');
+           List.innerText = databaseJson.incidents[i].location.location_description;
+           let createList = document.getElementById('listSearch');
+           console.log(createList);
+           createList.append(List);
+        }
+   
+       
+    }   
+   }
+
+function reset() {
+    document.getElementById('listSearch').innerHTML = '';
+}   
+   
