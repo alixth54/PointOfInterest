@@ -161,7 +161,7 @@ function compareDates (startDate, currentDate, endDate){
   };
   
 
-}
+
 // recherche par nom de rue
 
 
@@ -175,11 +175,10 @@ function searching(){
 
     
         if(elementList.indexOf(elementInput.toUpperCase()) !=-1 ){ 
-           let List= document.createElement('li');
+           let List= document.createElement('option');
            List.classList.add('dropList');
-           List.innerText = databaseJson.incidents[i].location.location_description;
+           List.value = databaseJson.incidents[i].location.location_description;
            let createList = document.getElementById('listSearch');
-           console.log(createList);
            createList.append(List);
         }
    
