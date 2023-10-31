@@ -11,7 +11,7 @@ document.addEventListener('DOMContentLoaded', (event) => {
     .then((json) => {
         databaseJson = json;
         for (let i = 0; i<databaseJson.incidents.length;i++) {
-            createMarker(databaseJson.incidents[i]);
+            createMarker(i,databaseJson.incidents[i]);
 
         }
       
@@ -32,10 +32,35 @@ L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
 }).addTo(map);
 
 
+function createCard(index) {
+
+    let cardArea = document.getElementById('cardArea');
+    cardArea.innerHTML = '';
+    let article = document.createElement('article'); 
+    article.classList.add('cardArticle');  
+    let title = document.createElement('h3');
+    title.classList.add('cardTitle');
+    let pStart = document.createElement('p');
+    let startTime = new Date(databaseJson.incidents[index].starttime);
+    pStart.innerText ='Début chantier : ' +startTime.getDate()+' / ' + startTime.getMonth() + ' / ' + startTime.getFullYear();
+    let pEnd = document.createElement('p');
+    let endTime = new Date(databaseJson.incidents[index].endtime);
+    pEnd.innerText ='Fin chantier : ' +endTime.getDate()+' / ' + endTime.getMonth() + ' / ' + endTime.getFullYear();
+    let pUpdate = document.createElement('p');
+    let upDate = new Date(databaseJson.incidents[index].updatetime);
+    pUpdate.innerText ='Dernière mise à jour : ' +upDate.getDate()+' / ' + upDate.getMonth() + ' / ' + upDate.getFullYear(); 
+    let buttonSignal = document.createElement('button');
+    buttonSignal.classList.add('cardButton');
+    buttonSignal.innerText = 'Signaler un problème';
+    article.append(title,pStart,pEnd,pUpdate,buttonSignal);
+
+    title.innerText = databaseJson.incidents[index].description;
+    cardArea.append(article);
+
+}
 
 
-
-function createMarker (coordinates){
+function createMarker (index,coordinates){
  
     let arrayCoordinates = coordinates.location.polyline.split(" ", 2);
     let lat = arrayCoordinates[0];
@@ -50,30 +75,22 @@ function createMarker (coordinates){
         iconUrl: '../media/stop.png',
         shadowUrl: '#',
         iconSize:     [38, 38], // size of the icon
-        // shadowSize:   [50, 64], // size of the shadow
-        // iconAnchor:   [22, 94], // point of the icon which will correspond to marker's location
-        // shadowAnchor: [4, 62],  // the same for the shadow
-        // popupAnchor:  [-3, -76] // point from which the popup should open relative to the iconAnchor
+
     });
     let orangeIcon = L.icon({
         iconUrl: '../media/traffic-jam.png',
         shadowUrl: '#',
         iconSize:     [38, 38], // size of the icon
-        // shadowSize:   [50, 64], // size of the shadow
-        // iconAnchor:   [22, 94], // point of the icon which will correspond to marker's location
-        // shadowAnchor: [4, 62],  // the same for the shadow
-        // popupAnchor:  [-3, -76] // point from which the popup should open relative to the iconAnchor
+
     });
     let blueIcon = L.icon({
         iconUrl: '../media/no-parking.png',
         shadowUrl: '#',
         iconSize:     [38, 38], // size of the icon
-        // shadowSize:   [50, 64], // size of the shadow
-        // // iconAnchor:   [, 94], // point of the icon which will correspond to marker's location
-        // shadowAnchor: [4, 62],  // the same for the shadow
-        // popupAnchor:  [-3, -76] // point from which the popup should open relative to the iconAnchor
     });
+     
     let details = coordinates.description;
+    const currentDate = new Date();
     startDate = new Date(coordinates.starttime); 
     startDay = startDate.getDate();
     startMonth = startDate.getMonth() + 1;
@@ -86,28 +103,30 @@ function createMarker (coordinates){
     majDay = majDate.getDate();
     majMonth = majDate.getMonth() + 1;
     majYear = majDate.getFullYear();
-
     
-            for(let j=0; j<arrayRed.length;j++){
-                if(details.toUpperCase().indexOf(arrayRed[j].toUpperCase()) !=-1 ){
-                    let markerRed = L.marker([lat, long],{icon:redIcon}).addTo(map);
-                    markerRed.bindPopup("<strong>CIRCULATION INTERDITE</strong><br> Début chantier: " + startDay + "/" + startMonth + "/" + startYear + "<br> Fin chantier: " + endDay + "/" + endMonth + "/" + endYear + "<br><button>En savoir plus</button>");
-                    j = arrayRed.length;
+    if(compareDates(startDate, currentDate, endDate)){    
+            for(let j=0; j<arrayRed.length;j++){   
+                    if(details.toUpperCase().indexOf(arrayRed[j].toUpperCase()) !=-1 ){
+                        let markerRed = L.marker([lat, long],{icon:redIcon}).addTo(map);
+                        markerRed.bindPopup("<strong>CIRCULATION INTERDITE</strong><br> Début chantier: " + startDay + "/" + startMonth + "/" + startYear + "<br> Fin chantier: " + endDay + "/" + endMonth + "/" + endYear + "<br><button onclick=createCard("+index+")> En savoir plus</button>");
+                        j = arrayRed.length;
 
-                }else if(details.toUpperCase().indexOf(arrayOrange[j].toUpperCase()) !=-1 ){
-                let markerOrange = L.marker([lat, long],{icon:orangeIcon}).addTo(map);
-                markerOrange.bindPopup("<strong>CIRCULATION LENTE</strong><br> Début chantier: " + startDay + "/" + startMonth + "/" + startYear + "<br> Fin chantier: " + endDay + "/" + endMonth + "/" + endYear + "<br><button>En savoir plus</button>");
-                    j=arrayRed.length;
-                }else if
-                (details.toUpperCase().indexOf(arrayBlue[j].toUpperCase()) !=-1 )
-                {
-                    let markerBlue = L.marker([lat, long],{icon:blueIcon}).addTo(map);
-                    markerBlue.bindPopup("<strong>PROBLEME STATIONNEMENT</strong><br> Début chantier: " + startDay + "/" + startMonth + "/" + startYear + "<br> Fin chantier: " + endDay + "/" + endMonth + "/" + endYear + "<br><button>En savoir plus</button>");
-                    j=arrayRed.length;
-                }
-        }
-       
-        
+                    }else if(details.toUpperCase().indexOf(arrayOrange[j].toUpperCase()) !=-1 ){
+                    let markerOrange = L.marker([lat, long],{icon:orangeIcon}).addTo(map);
+                    markerOrange.bindPopup("<strong>CIRCULATION LENTE</strong><br> Début chantier: " + startDay + "/" + startMonth + "/" + startYear + "<br> Fin chantier: " + endDay + "/" + endMonth + "/" + endYear + "<br><button onclick=createCard("+index+")> En savoir plus</button>");
+                        j=arrayRed.length;
+                    }else if
+                    (details.toUpperCase().indexOf(arrayBlue[j].toUpperCase()) !=-1 )
+                    {
+                        let markerBlue = L.marker([lat, long],{icon:blueIcon}).addTo(map);
+                        markerBlue.bindPopup("<strong>PROBLEME STATIONNEMENT</strong><br> Début chantier: " + startDay + "/" + startMonth + "/" + startYear + "<br> Fin chantier: " + endDay + "/" + endMonth + "/" + endYear + "<br><button onclick=createCard("+index+")> En savoir plus</button>");
+                        j=arrayRed.length;
+                    }
+            }
+        } else {
+            let marker = L.marker([lat, long]).addTo(map);
+            
+        }   
     }
    
 
@@ -126,6 +145,16 @@ function boundMapMaxMin(lat,long){
    }
    bounds = new L.latLngBounds(latLongMin, latLongMax);
 map.fitBounds(bounds);
-   console.log(bounds);
    map.setMaxBounds(bounds);
 }
+
+function compareDates (startDate, currentDate, endDate){
+    let date1 = startDate.getTime();
+    let date2 = currentDate.getTime();
+    let date3 = endDate.getTime();
+  
+    if (date1 <= date2 && date2 <= date3) {
+      return 1;
+    }else return 0;
+  };
+  
