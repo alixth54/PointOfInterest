@@ -3,10 +3,42 @@
 }
 
 #map {
-    height: 500px;
-    
-    
+    max-height: 400px;
+
 }
+
+#logo img{
+    max-width: 200px;
+
+}
+
+.topPages{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+
+}
+
+#toolBar{
+    display: flex;
+    flex-direction: row;
+margin-right: 50px;
+}
+
+#toolBar button{
+background-color: transparent;
+border: none;
+font-size: 20px;
+
+}
+
+#toolBar input{
+    padding:5px;
+}
+   
+    
+    
+
 
 .cardArticle {
     border: 1px solid black;

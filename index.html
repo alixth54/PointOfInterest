@@ -6,6 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Travaux Nancy</title>
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
+    <link rel="stylesheet" type="text/css" href="css/style.css">
     <link rel="stylesheet" href="/css/style.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -13,12 +14,21 @@
 </head>
 
 <body>
-    <header> 
-        <section>
+    <header>
+        <section class="topPages">
             <article id="logo">
-                <img>
+                <img src="media\travaux-nancy-high-resolution-logo-transparent.png" alt="logo travaux nancy" title="travaux nancy">
             </article>
-            <article id="searchBar"></article>
+            <article id="toolBar">
+                <div>
+                    <button><i class="fa-solid fa-magnifying-glass"></i></button>
+                </div>
+                <div >
+                    <input id="searchBar" type="search"  oninput="searching()" placeholder=>
+                <ul id="listSearch"></ul>
+                </div> 
+                
+            </article>
         </section>
     </header>
     <main>
@@ -26,6 +36,7 @@
             <div id="map"></div>
         <article id="cardArea">
 
+            <div id="map" style="height:400px"></div>
         </article>
         </article>
 
@@ -41,7 +52,9 @@
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
     integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo="
     crossorigin=""></script>
-    <script src="/javascript/script.js"></script>
+    <script src="javascript/script.js"></script>
+    <script src="https://kit.fontawesome.com/a606278b24.js" crossorigin="anonymous"></script>
+
 </body>
 
 </html>
