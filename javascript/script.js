@@ -36,11 +36,11 @@ L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
 markerGroup = L.layerGroup().addTo(map);
 
 function createCard(index) {
-
     let cardArea = document.getElementById('cardArea');
     cardArea.innerHTML = '';
     let article = document.createElement('article'); 
     article.classList.add('cardArticle');  
+    article.setAttribute('id', index);
     let title = document.createElement('h3');
     title.classList.add('cardTitle');
     let pStart = document.createElement('p');
@@ -176,10 +176,8 @@ function searching(){
     
     for (let i = 0; i<databaseJson.incidents.length;i++) {
         let elementList=databaseJson.incidents[i].location.location_description;
-
-    
-        if(elementList.indexOf(elementInput.toUpperCase()) !=-1 ){ 
-           let List= document.createElement('option');
+        if(elementList.indexOf(elementInput.toUpperCase()) !=-1 ){   
+        let List= document.createElement('option');
            List.classList.add('dropList');
            List.value = databaseJson.incidents[i].location.location_description;
            let createList = document.getElementById('listSearch');
@@ -195,7 +193,6 @@ function searching(){
 function reset() {
     document.getElementById('listSearch').innerHTML = '';
 }   
-
 function futureEvents(index){
     if (!(compareDates (startDate, currentDate, endDate))){
 
