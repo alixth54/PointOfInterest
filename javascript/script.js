@@ -3,7 +3,7 @@ let databaseJson;
 let startDay, startMonth, startYear;
 let endDate, endDay, endMonth, endYear;
 let majDate, majDay, majMonth, majYear;
-
+let markerRed, markerOrange, markerBlue;
 document.addEventListener('DOMContentLoaded', (event) => {
     fetch('https://carto.g-ny.org/data/cifs/cifs_waze_v2.json')
     .then((response) => {
@@ -34,12 +34,25 @@ L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
 }).addTo(map);
 
 
-function createCard(index) {
+// if ("geolocation" in navigator) {
+//     /* geolocation is available */
+//     navigator.geolocation.getCurrentPosition((position) => {
+//         console.log((position.coords.latitude, position.coords.longitude));
+//         marker = L.marker([position.coords.latitude, position.coords.longitude]).addTo(map);
+//          });
 
+//   } else { console.log('no location');
+//     /* geolocation IS NOT available */
+//   }
+
+
+
+function createCard(index) {
     let cardArea = document.getElementById('cardArea');
     cardArea.innerHTML = '';
     let article = document.createElement('article'); 
     article.classList.add('cardArticle');  
+    article.setAttribute('id', index);
     let title = document.createElement('h3');
     title.classList.add('cardTitle');
     let pStart = document.createElement('p');
@@ -112,25 +125,25 @@ function createMarker (index,coordinates){
     if(compareDates(startDate, currentDate, endDate)){    
             for(let j=0; j<arrayRed.length;j++){   
                     if(details.toUpperCase().indexOf(arrayRed[j].toUpperCase()) !=-1 ){
-                        let markerRed = L.marker([lat, long],{icon:redIcon}).addTo(map);
-                        markerRed.bindPopup("<strong>CIRCULATION INTERDITE</strong><br> Début chantier: " + startDay + "/" + startMonth + "/" + startYear + "<br> Fin chantier: " + endDay + "/" + endMonth + "/" + endYear + "<br><button onclick=createCard("+index+")> En savoir plus</button>");
+                         markerRed = L.marker([lat, long],{icon:redIcon}).addTo(map);
+                        markerRed.bindPopup("<strong>CIRCULATION INTERDITE</strong><br> Début chantier: " + startDay + "/" + startMonth + "/" + startYear + "<br> Fin chantier: " + endDay + "/" + endMonth + "/" + endYear + "<br><a href=#"+index+"><button onclick=createCard("+index+")> En savoir plus</button></a>");
                         j = arrayRed.length;
 
                     }else if(details.toUpperCase().indexOf(arrayOrange[j].toUpperCase()) !=-1 ){
-                    let markerOrange = L.marker([lat, long],{icon:orangeIcon}).addTo(map);
-                    markerOrange.bindPopup("<strong>CIRCULATION LENTE</strong><br> Début chantier: " + startDay + "/" + startMonth + "/" + startYear + "<br> Fin chantier: " + endDay + "/" + endMonth + "/" + endYear + "<br><button onclick=createCard("+index+")> En savoir plus</button>");
+                    markerOrange = L.marker([lat, long],{icon:orangeIcon}).addTo(map);
+                    markerOrange.bindPopup("<strong>CIRCULATION LENTE</strong><br> Début chantier: " + startDay + "/" + startMonth + "/" + startYear + "<br> Fin chantier: " + endDay + "/" + endMonth + "/" + endYear + "<br><a href=#"+index+"><button onclick=createCard("+index+")> En savoir plus</button></a>");
                         j=arrayRed.length;
                     }else if
                     (details.toUpperCase().indexOf(arrayBlue[j].toUpperCase()) !=-1 )
                     {
-                        let markerBlue = L.marker([lat, long],{icon:blueIcon}).addTo(map);
-                        markerBlue.bindPopup("<strong>PROBLEME STATIONNEMENT</strong><br> Début chantier: " + startDay + "/" + startMonth + "/" + startYear + "<br> Fin chantier: " + endDay + "/" + endMonth + "/" + endYear + "<br><button onclick=createCard("+index+")> En savoir plus</button>");
+                        markerBlue = L.marker([lat, long],{icon:blueIcon}).addTo(map);
+                        markerBlue.bindPopup("<strong>PROBLEME STATIONNEMENT</strong><br> Début chantier: " + startDay + "/" + startMonth + "/" + startYear + "<br> Fin chantier: " + endDay + "/" + endMonth + "/" + endYear + "<br><a href=#"+index+"><button onclick=createCard("+index+")> En savoir plus</button></a>");
                         j=arrayRed.length;
                     }
             }
         } else {
-        let marker = L.marker([lat, long]).addTo(map);
-        
+        //let marker = L.marker([lat, long]).addTo(map);
+        document.getElementById('titleFuture').innerText ="Projets d'avenir";
         let futureProjects = document.getElementById('futureProjects');
         let article = document.createElement('article'); 
         article.classList.add('futureTask');  
@@ -149,7 +162,6 @@ function createMarker (index,coordinates){
     
         title.innerText = databaseJson.incidents[index].description;
         futureProjects.append(article);
-        console.log(article);
             
             
         }   
@@ -196,10 +208,8 @@ function searching(){
     
     for (let i = 0; i<databaseJson.incidents.length;i++) {
         let elementList=databaseJson.incidents[i].location.location_description;
-
-    
-        if(elementList.indexOf(elementInput.toUpperCase()) !=-1 ){ 
-           let List= document.createElement('option');
+        if(elementList.indexOf(elementInput.toUpperCase()) !=-1 ){   
+        let List= document.createElement('option');
            List.classList.add('dropList');
            List.value = databaseJson.incidents[i].location.location_description;
            let createList = document.getElementById('listSearch');

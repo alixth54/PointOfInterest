@@ -6,11 +6,22 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Travaux Nancy</title>
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet-routing-machine@latest/dist/leaflet-routing-machine.css" />
+    <link rel="stylesheet" href="https://unpkg.com/leaflet-control-geocoder/dist/Control.Geocoder.css" />
     <link rel="stylesheet" type="text/css" href="css/style.css">
     <link rel="stylesheet" href="/css/style.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inconsolata:wght@800&family=Roboto&display=swap" rel="stylesheet">
+    <style>
+         /* .leaflet-routing-container .leaflet-routing-alt {
+            display: none !important;
+        } */
+
+        .leaflet-routing-geocoder input::placeholder {
+            padding: 5px 10px;
+        }
+    </style>
 </head>
 
 <body>
@@ -33,9 +44,17 @@
     </header>
     <main>
         <article id="areaMap">
-        <aside id="legend"></aside>
+        <aside id="legend" style="max-width: 80px;">
+            <h3>Pour obtenir un itinéraire, choisissez votre langue :</h3>
+            <input id="en" type="radio" name="language" value="en"  onclick="createItinerary()">
+                <label for="en">Anglais</label> 
+            <input id="fr" type="radio" name="language" value="fr" onclick="createItinerary()">
+                <label for= "fr">Français</label>
+        </aside>
         <div id="map" style="height:70vh; min-height:80%; min-width: 50%;"></div>
-        <article id="futureProjects"></article>    
+            <div id="wrapArticle"><h1 id="titleFuture"></h1>
+            <article id="futureProjects"></article>    
+            </div>    
         </article> 
         <article id="cardArea">    
         </article>
@@ -53,7 +72,10 @@
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
     integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo="
     crossorigin=""></script>
+    <script src="https://unpkg.com/leaflet-routing-machine@latest/dist/leaflet-routing-machine.js"></script>
+    <script src="https://unpkg.com/leaflet-control-geocoder/dist/Control.Geocoder.js"></script>
     <script src="javascript/script.js"></script>
+    <script src="javascript/routing.js"></script>
     <script src="https://kit.fontawesome.com/a606278b24.js" crossorigin="anonymous"></script>
 
 </body>
