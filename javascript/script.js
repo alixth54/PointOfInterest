@@ -1,9 +1,9 @@
-
 let databaseJson;
 let startDay, startMonth, startYear;
 let endDate, endDay, endMonth, endYear;
 let majDate, majDay, majMonth, majYear;
-
+const currentDate = new Date();
+let markerGroup;
 document.addEventListener('DOMContentLoaded', (event) => {
     fetch('https://carto.g-ny.org/data/cifs/cifs_waze_v2.json')
     .then((response) => {
@@ -13,7 +13,7 @@ document.addEventListener('DOMContentLoaded', (event) => {
         databaseJson = json;
         for (let i = 0; i<databaseJson.incidents.length;i++) {
             createMarker(i,databaseJson.incidents[i]);
-
+            futureEvents(i);
         }
         
         
@@ -27,12 +27,13 @@ let latLongMin = L.latLng(48.677675, 6.158160),
 
 let map = L.map('map');
 map.setView([48.693463, 6.193167], 14);
+
 // map.fitBounds(bounds);
 L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
     maxZoom: 19,
     attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
 }).addTo(map);
-
+markerGroup = L.layerGroup().addTo(map);
 
 function createCard(index) {
 
@@ -95,7 +96,7 @@ function createMarker (index,coordinates){
     });
      
     let details = coordinates.description;
-    const currentDate = new Date();
+    
     startDate = new Date(coordinates.starttime); 
     startDay = startDate.getDate();
     startMonth = startDate.getMonth() + 1;
@@ -112,47 +113,25 @@ function createMarker (index,coordinates){
     if(compareDates(startDate, currentDate, endDate)){    
             for(let j=0; j<arrayRed.length;j++){   
                     if(details.toUpperCase().indexOf(arrayRed[j].toUpperCase()) !=-1 ){
-                        let markerRed = L.marker([lat, long],{icon:redIcon}).addTo(map);
+                        let markerRed = L.marker([lat, long],{icon:redIcon}).addTo(markerGroup);
                         markerRed.bindPopup("<strong>CIRCULATION INTERDITE</strong><br> Début chantier: " + startDay + "/" + startMonth + "/" + startYear + "<br> Fin chantier: " + endDay + "/" + endMonth + "/" + endYear + "<br><button onclick=createCard("+index+")> En savoir plus</button>");
                         j = arrayRed.length;
 
                     }else if(details.toUpperCase().indexOf(arrayOrange[j].toUpperCase()) !=-1 ){
-                    let markerOrange = L.marker([lat, long],{icon:orangeIcon}).addTo(map);
+                    let markerOrange = L.marker([lat, long],{icon:orangeIcon}).addTo(markerGroup);
                     markerOrange.bindPopup("<strong>CIRCULATION LENTE</strong><br> Début chantier: " + startDay + "/" + startMonth + "/" + startYear + "<br> Fin chantier: " + endDay + "/" + endMonth + "/" + endYear + "<br><button onclick=createCard("+index+")> En savoir plus</button>");
                         j=arrayRed.length;
                     }else if
                     (details.toUpperCase().indexOf(arrayBlue[j].toUpperCase()) !=-1 )
                     {
-                        let markerBlue = L.marker([lat, long],{icon:blueIcon}).addTo(map);
+                        let markerBlue = L.marker([lat, long],{icon:blueIcon}).addTo(markerGroup);
                         markerBlue.bindPopup("<strong>PROBLEME STATIONNEMENT</strong><br> Début chantier: " + startDay + "/" + startMonth + "/" + startYear + "<br> Fin chantier: " + endDay + "/" + endMonth + "/" + endYear + "<br><button onclick=createCard("+index+")> En savoir plus</button>");
                         j=arrayRed.length;
                     }
             }
-        } else {
-        let marker = L.marker([lat, long]).addTo(map);
-        
-        let futureProjects = document.getElementById('futureProjects');
-        let article = document.createElement('article'); 
-        article.classList.add('futureTask');  
-        let title = document.createElement('h3');
-        title.classList.add('projectTitle');
-        let pStart = document.createElement('p');
-        let startTime = new Date(databaseJson.incidents[index].starttime);
-        let correctStartMonth = startTime.getMonth() +1; 
-        pStart.innerText ='Début chantier : ' +startTime.getDate()+' / ' + correctStartMonth + ' / ' + startTime.getFullYear();
-        let pEnd = document.createElement('p');
-        let endTime = new Date(databaseJson.incidents[index].endtime);
-        let correctEndMonth = endTime.getMonth() +1;
-        pEnd.innerText ='Fin chantier : ' +endTime.getDate()+' / ' + correctEndMonth  + ' / ' + endTime.getFullYear();
-        let pUpdate = document.createElement('p');
-        article.append(title,pStart,pEnd);
-    
-        title.innerText = databaseJson.incidents[index].description;
-        futureProjects.append(article);
-        console.log(article);
-            
-            
-        }   
+        } 
+   
+       
     }
    
 
@@ -171,7 +150,7 @@ function boundMapMaxMin(lat,long){
    }
    bounds = new L.latLngBounds(latLongMin, latLongMax);
 map.fitBounds(bounds);
-   map.setMaxBounds(bounds);
+
 }
 
 function compareDates (startDate, currentDate, endDate){
@@ -191,6 +170,7 @@ function compareDates (startDate, currentDate, endDate){
 
     
 function searching(){
+   markerGroup.clearLayers();
     let elementInput= document.getElementById('searchBar').value;  // recuperation donnée taper dans barre recherche
     document.getElementById('listSearch').innerHTML = '';
     
@@ -204,6 +184,8 @@ function searching(){
            List.value = databaseJson.incidents[i].location.location_description;
            let createList = document.getElementById('listSearch');
            createList.append(List);
+           createMarker (i,databaseJson.incidents[i]);
+
         }
    
        
@@ -213,4 +195,30 @@ function searching(){
 function reset() {
     document.getElementById('listSearch').innerHTML = '';
 }   
-   
+
+function futureEvents(index){
+    if (!(compareDates (startDate, currentDate, endDate))){
+
+        let futureProjects = document.getElementById('futureProjects');
+        let article = document.createElement('article'); 
+        article.classList.add('futureTask');  
+        let title = document.createElement('h3');
+        title.classList.add('projectTitle');
+        let pStart = document.createElement('p');
+        let startTime = new Date(databaseJson.incidents[index].starttime);
+        let correctStartMonth = startTime.getMonth() +1; 
+        pStart.innerText ='Début chantier : ' +startTime.getDate()+' / ' + correctStartMonth + ' / ' + startTime.getFullYear();
+        let pEnd = document.createElement('p');
+        let endTime = new Date(databaseJson.incidents[index].endtime);
+        let correctEndMonth = endTime.getMonth() +1;
+        pEnd.innerText ='Fin chantier : ' +endTime.getDate()+' / ' + correctEndMonth  + ' / ' + endTime.getFullYear();
+        let pUpdate = document.createElement('p');
+        article.append(title,pStart,pEnd);
+    
+        title.innerText = databaseJson.incidents[index].description;
+        
+        futureProjects.append(article);
+        
+    }
+
+}
