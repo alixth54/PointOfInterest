@@ -193,9 +193,10 @@ function searching(){
 function reset() {
     document.getElementById('listSearch').innerHTML = '';
 }   
+
 function futureEvents(index){
     if (!(compareDates (startDate, currentDate, endDate))){
-
+        document.getElementById('titleFuture').innerText = "Projets futurs";
         let futureProjects = document.getElementById('futureProjects');
         let article = document.createElement('article'); 
         article.classList.add('futureTask');  
