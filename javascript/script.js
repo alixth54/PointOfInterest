@@ -1,9 +1,12 @@
-let databaseJson;
+// déclaration des variables pour les utiliser dans les differentes fonction
+let databaseJson;  //acces api open data nancy
 let startDay, startMonth, startYear;
 let endDate, endDay, endMonth, endYear;
 let majDate, majDay, majMonth, majYear;
-const currentDate = new Date();
-let markerGroup;
+const currentDate = new Date(); //date du jour
+let markerGroup; // variable pour creation layer sur leaflet
+
+//fetch open data nancy ajout event onload et recuperartion fichier json
 document.addEventListener('DOMContentLoaded', (event) => {
     fetch('https://carto.g-ny.org/data/cifs/cifs_waze_v2.json')
     .then((response) => {
@@ -11,8 +14,9 @@ document.addEventListener('DOMContentLoaded', (event) => {
     }) 
     .then((json) => {
         databaseJson = json;
-        for (let i = 0; i<databaseJson.incidents.length;i++) {
-            createMarker(i,databaseJson.incidents[i]);
+        //chargement du json lent et pour que les marqueurs soient creer à l'ouverture du site on recupere les donnée du json directement
+        for (let i = 0; i<databaseJson.incidents.length;i++) { 
+            createMarker(i,databaseJson.incidents[i]);// fonction appeler au demarrage et deja incrementée
             futureEvents(i);
         }
         
@@ -20,32 +24,37 @@ document.addEventListener('DOMContentLoaded', (event) => {
     });
 
 });
+
+//recuperation lattitude et longitude maximum et minimum pour gerer limite de la carte
 let latLongMin = L.latLng(48.677675, 6.158160),
     latLongMax = L.latLng(48.701081, 6.206054),
     bounds = new L.latLngBounds(latLongMin, latLongMax);
-    // .setView([48.693463, 6.183167], 14)
+    
 
+    //info leaflet pour creation de la map avec coordonnées sur nancy
 let map = L.map('map');
 map.setView([48.693463, 6.193167], 14);
 
-// map.fitBounds(bounds);
+// info leaflet pour creation de la map avec element zoom 
 L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
     maxZoom: 19,
     attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
 }).addTo(map);
+//creation d'un layer pour les markers (point sur la carte) reutiliser dans la fonction createMarker
 markerGroup = L.layerGroup().addTo(map);
 
-function createCard(index) {
-    let cardArea = document.getElementById('cardArea');
-    cardArea.innerHTML = '';
-    let article = document.createElement('article'); 
-    article.classList.add('cardArticle');  
-    article.setAttribute('id', index);
-    let title = document.createElement('h3');
-    title.classList.add('cardTitle');
-    let pStart = document.createElement('p');
-    let startTime = new Date(databaseJson.incidents[index].starttime);
-    let correctStartMonth = startTime.getMonth() +1; 
+//creation de card en cliquant sur le bouton detail du popup. fonction appelée par event onclick
+function createCard(index) {  //le parametre index est le meme que createMarker ce qui correspond au i dans la boucle for dans le fetch au dessus
+    let cardArea = document.getElementById('cardArea');  //creation variable qui va se situer dans element html id='cardArea'
+    cardArea.innerHTML = '';                            //on vide le la variable soit l'element html a chaque appel afin d'eviter de se retrouver avec de nombreuses cartes appelées
+    let article = document.createElement('article');       //on creer une balise html article 
+    article.classList.add('cardArticle');                  //on donne une class a cette balise
+    article.setAttribute('id', index);                      //on lui donne un id avec le numero de l'index pour chaque card
+    let title = document.createElement('h3');               //on creer in titre pour la card
+    title.classList.add('cardTitle');                         //class='cardTitle' pour le titre
+    let pStart = document.createElement('p');                   //creation paragraphe
+    let startTime = new Date(databaseJson.incidents[index].starttime);  //on recupere la date de debut de chantier puis on utilise la fonction Date() pour prendre la partie date qui nous interesse et on meme cette info dans une variable
+    let correctStartMonth = startTime.getMonth() +1;                    // la date n'est pas au format europeen donc on recupere la valeur du mois getMonth() janvier commence a 0 donc on doit ajouter 1, du jour getDate() et de l'année getFullYear() pour apres les mettre dans l'ordre dans notre card
     pStart.innerText ='Début chantier : ' +startTime.getDate()+' / ' + correctStartMonth + ' / ' + startTime.getFullYear();
     let pEnd = document.createElement('p');
     let endTime = new Date(databaseJson.incidents[index].endtime);
@@ -55,48 +64,49 @@ function createCard(index) {
     let upDate = new Date(databaseJson.incidents[index].updatetime);
     let correctUpdate = upDate.getMonth();
     pUpdate.innerText ='Dernière mise à jour : ' +upDate.getDate()+' / ' + correctUpdate + ' / ' + upDate.getFullYear(); 
-    let buttonSignal = document.createElement('button');
-    buttonSignal.classList.add('cardButton');
-    buttonSignal.innerText = 'Signaler un problème';
-    article.append(title,pStart,pEnd,pUpdate,buttonSignal);
+    let buttonSignal = document.createElement('button');  // on creer un bouton en bas de la card pour appeler un formulaire de contact
+    buttonSignal.classList.add('cardButton');           //ajout class='cardButton' au bouton
+    buttonSignal.innerText = 'Signaler un problème'; //text visible sur le bouton
+    article.append(title,pStart,pEnd,pUpdate,buttonSignal); //creation de l'element html qui contient les differents elelements creer soit l'article contient le titre le paragraphe, les dates et le bouton
 
-    title.innerText = databaseJson.incidents[index].description;
-    cardArea.append(article);
+    title.innerText = databaseJson.incidents[index].description; //insertion text du json dans le titre de la card
+    cardArea.append(article); // creation de l'article (append precedent) dans la variable cardArea qui est declarée au début soit l'element html id=cardArea
 
 }
 
-
+// parametre fonction = index: i incrementation fetch et coordinates = i,databaseJson.incidents[i] deja incrémenté pas besoin de boucle for
 function createMarker (index,coordinates){
  
+    //dans le json les coordonnées sont données dans un meme objet pour les utiliser il nous faut les couper (usage fonction split())
     let arrayCoordinates = coordinates.location.polyline.split(" ", 2);
-    let lat = arrayCoordinates[0];
-    let long =arrayCoordinates[1];
-    boundMapMaxMin(lat,long);
+    let lat = arrayCoordinates[0]; //on obtient un tableau avec 1er element split soit latitude
+    let long =arrayCoordinates[1];//on obtient un autre tableau avec 2eme element split soit longitude
+    boundMapMaxMin(lat,long);  // appel de la fonction boundMapMaxMin ligne 151(avec recuperation valeur variable lat et long au dessus)
    
- 
-    let arrayOrange =['gêne','réduction','alternée'];
+ // en etudiant le json nous avons trouver 3 axes de travail, soit on ne peut pas circuler; soit la circulation est ralentie et soit il s'agit d'un probleme de stationnement
+    
+ //on va donc chercher 3 mots qui correspondent à nos cas et que l'on va rechercher dans le json. 
+ let arrayOrange =['gêne','réduction','alternée'];
     let arrayRed =['barrée','suppression','suppression'];
     let arrayBlue =['stationnement interdit','stationement difficile','stationement difficile'];
+    // creation de 3 icones soit une pour chaque cas (information sur leaflet) 
     let redIcon = L.icon({
-        iconUrl: '../media/stop.png',
-        shadowUrl: '#',
+        iconUrl: '../media/stop.png', //chemin acces image telechargée
         iconSize:     [38, 38], // size of the icon
 
     });
     let orangeIcon = L.icon({
         iconUrl: '../media/traffic-jam.png',
-        shadowUrl: '#',
         iconSize:     [38, 38], // size of the icon
 
     });
     let blueIcon = L.icon({
         iconUrl: '../media/no-parking.png',
-        shadowUrl: '#',
         iconSize:     [38, 38], // size of the icon
     });
-     
+     // pour simplifier l'ecriture on creer une variable 'details' = databaseJson.incidents[index].description
     let details = coordinates.description;
-    
+    // recuperation date a nouveau
     startDate = new Date(coordinates.starttime); 
     startDay = startDate.getDate();
     startMonth = startDate.getMonth() + 1;
@@ -110,12 +120,14 @@ function createMarker (index,coordinates){
     majMonth = majDate.getMonth() + 1;
     majYear = majDate.getFullYear();
     
+//creation des markers 1ere condition la date du jour doit etre comprise entre date debut et fin (comparaison dans fonction compareDate() ligne 167)
     if(compareDates(startDate, currentDate, endDate)){    
-            for(let j=0; j<arrayRed.length;j++){   
-                    if(details.toUpperCase().indexOf(arrayRed[j].toUpperCase()) !=-1 ){
-                        let markerRed = L.marker([lat, long],{icon:redIcon}).addTo(markerGroup);
+            for(let j=0; j<arrayRed.length;j++){   //on parcours les tableaux de mot ci-dessus
+                    if(details.toUpperCase().indexOf(arrayRed[j].toUpperCase()) !=-1 ){// on trouve dans le json un mot qui ressemble aux mot du tableau arrayRed alors
+                        let markerRed = L.marker([lat, long],{icon:redIcon}).addTo(markerGroup); // on créé le marker rouge et on l'ajout au layer creer ligne44.
+                        //creation, sur chaque marker, d'un popup 
                         markerRed.bindPopup("<strong>CIRCULATION INTERDITE</strong><br> Début chantier: " + startDay + "/" + startMonth + "/" + startYear + "<br> Fin chantier: " + endDay + "/" + endMonth + "/" + endYear + "<br><button onclick=createCard("+index+")> En savoir plus</button>");
-                        j = arrayRed.length;
+                        j = arrayRed.length; //pour eviter la creation d'un double marker car parfois la route peut etre barrée et le stationnement interdit donc on arrete la boucle une fois le mot trouvé
 
                     }else if(details.toUpperCase().indexOf(arrayOrange[j].toUpperCase()) !=-1 ){
                     let markerOrange = L.marker([lat, long],{icon:orangeIcon}).addTo(markerGroup);
@@ -134,9 +146,10 @@ function createMarker (index,coordinates){
        
     }
    
-
-function boundMapMaxMin(lat,long){
-   if(latLongMin.lat > lat) {
+//les données du json sont evolutives donc on met a jour les limites de la cartes on prend la latitude max et la longitude max du json, on fait de meme avec les coordonnées minimales
+//ainsi les limites de la cartes sont réactualisées en fonctions des evenements en cours
+function boundMapMaxMin(lat,long){ //lat et long sont des parametres decla
+   if(latLongMin.lat > lat) {//on compare la latitude min par rapport a la lat 
     latLongMin.lat = lat;
    }
    if(latLongMax.lat < lat) {
