@@ -91,17 +91,17 @@ function createMarker (index,coordinates){
     let arrayBlue =['stationnement interdit','stationement difficile','stationement difficile'];
     // creation de 3 icones soit une pour chaque cas (information sur leaflet) 
     let redIcon = L.icon({
-        iconUrl: '../media/stop.png', //chemin acces image telechargée
+        iconUrl: 'media/stop.png', //chemin acces image telechargée
         iconSize:     [38, 38], // size of the icon
 
     });
     let orangeIcon = L.icon({
-        iconUrl: '../media/traffic-jam.png',
+        iconUrl: 'media/traffic-jam.png',
         iconSize:     [38, 38], // size of the icon
 
     });
     let blueIcon = L.icon({
-        iconUrl: '../media/no-parking.png',
+        iconUrl: 'media/no-parking.png',
         iconSize:     [38, 38], // size of the icon
     });
      // pour simplifier l'ecriture on creer une variable 'details' = databaseJson.incidents[index].description
@@ -184,7 +184,7 @@ function compareDates (startDate, currentDate, endDate){
     
 function searching(){
    markerGroup.clearLayers();
-    let elementInput= document.getElementById('searchBar').value;  // recuperation donnée taper dans barre recherche
+    let elementInput= document.getElementById('searchBar').value;  // récupération donnée taper dans barre recherche
     document.getElementById('listSearch').innerHTML = '';
     
     for (let i = 0; i<databaseJson.incidents.length;i++) {
