@@ -42,30 +42,42 @@
         </section>
     </header>
     <main>
-        <article id="areaMap">
         <aside id="legend">
             <h3>Pour obtenir un itinéraire, choisissez votre langue :</h3>
+            <div>
             <input id="en" type="radio" name="language" value="en"  onclick="createItinerary()">
                 <label for="en">Anglais</label> 
             <input id="fr" type="radio" name="language" value="fr" onclick="createItinerary()">
                 <label for= "fr">Français</label>
+            </div>
+            <h3 >Légende :</h3>
+            <div id="legendIcon">
+                <img src="media/stop.png" alt="point circulation interdite" title="point circulation interdite">
+                <p>: circulation interdite</p>
+                <img src="media/traffic-jam.png" alt="point circulation lente" title="point circulation lente">
+                <p>: circulation lente</p>
+                <img src="media/no-parking.png" alt="point info stationnement" title="point info stationnement">
+                <p>: info stationnement</p>
+            </div>
         </aside>
-        <div id="map" style="height: 100em; min-height:100%; min-width: 50%;"></div>
-            <div id="wrapArticle"><h1 id="titleFuture"></h1>
-            <article id="futureProjects"></article>    
-            </div>    
-        </article> 
-        <article id="cardArea">    
+        <article id="areaMap">
+            
+            <div id="map" style="height: 100em; min-height:100%; min-width: 50%;"></div>
+                <div id="wrapArticle"><h1 id="titleFuture"></h1>
+                <article id="futureProjects"></article>    
+                </div>    
+            </article> 
+            <article id="cardArea">    
         </article>
         
 
     </main>
     <footer>
         <article id="copyright">
-
+<p>Site développé par <span class="author">Fineas DOLHA</span> et <span class="author">Alix THESE</span></p>
         </article>
         <article id="contact">
-            <button>Contactez-nous</button>
+            <button>Nous Contacter</button>
         </article>
     </footer>
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"

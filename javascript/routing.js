@@ -46,7 +46,6 @@ function createItinerary() {
     })
     .on('routeselected', function(e) {
         var route = e.route;
-        console.log(route);
 
     })
         .addTo(map);

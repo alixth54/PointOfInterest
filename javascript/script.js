@@ -60,6 +60,8 @@ function createCard(index) {  //le parametre index est le meme que createMarker 
     let endTime = new Date(databaseJson.incidents[index].endtime);
     let correctEndMonth = endTime.getMonth() +1;
     pEnd.innerText ='Fin chantier : ' +endTime.getDate()+' / ' + correctEndMonth + ' / ' + endTime.getFullYear();
+    let Description = document.createElement('p');
+    Description.innerText = 'Description : '+ databaseJson.incidents[index].description;    
     let pUpdate = document.createElement('p');
     let upDate = new Date(databaseJson.incidents[index].updatetime);
     let correctUpdate = upDate.getMonth();
@@ -67,9 +69,9 @@ function createCard(index) {  //le parametre index est le meme que createMarker 
     let buttonSignal = document.createElement('button');  // on creer un bouton en bas de la card pour appeler un formulaire de contact
     buttonSignal.classList.add('cardButton');           //ajout class='cardButton' au bouton
     buttonSignal.innerText = 'Signaler un problème'; //text visible sur le bouton
-    article.append(title,pStart,pEnd,pUpdate,buttonSignal); //creation de l'element html qui contient les differents elelements creer soit l'article contient le titre le paragraphe, les dates et le bouton
+    article.append(title,pStart,pEnd,Description,pUpdate,buttonSignal); //creation de l'element html qui contient les differents elelements creer soit l'article contient le titre le paragraphe, les dates et le bouton
 
-    title.innerText = databaseJson.incidents[index].description; //insertion text du json dans le titre de la card
+    title.innerText ='CHANTIER '+ databaseJson.incidents[index].location.location_description; //insertion text du json dans le titre de la card
     cardArea.append(article); // creation de l'article (append precedent) dans la variable cardArea qui est declarée au début soit l'element html id=cardArea
 
 }
@@ -208,13 +210,14 @@ function reset() {
 }   
 
 function futureEvents(index){
-    if (!(compareDates (startDate, currentDate, endDate))){
+    if (!(compareDates (startDate, currentDate, endDate,))){
         document.getElementById('titleFuture').innerText = "Projets futurs";
         let futureProjects = document.getElementById('futureProjects');
         let article = document.createElement('article'); 
         article.classList.add('futureTask');  
         let title = document.createElement('h3');
         title.classList.add('projectTitle');
+        title.innerText ='CHANTIER '+ databaseJson.incidents[index].location.location_description;
         let pStart = document.createElement('p');
         let startTime = new Date(databaseJson.incidents[index].starttime);
         let correctStartMonth = startTime.getMonth() +1; 
@@ -224,9 +227,12 @@ function futureEvents(index){
         let correctEndMonth = endTime.getMonth() +1;
         pEnd.innerText ='Fin chantier : ' +endTime.getDate()+' / ' + correctEndMonth  + ' / ' + endTime.getFullYear();
         let pUpdate = document.createElement('p');
-        article.append(title,pStart,pEnd);
-    
-        title.innerText = databaseJson.incidents[index].description;
+    let upDate = new Date(databaseJson.incidents[index].updatetime);
+    let correctUpdate = upDate.getMonth();
+    pUpdate.innerText ='Dernière mise à jour : ' +upDate.getDate()+' / ' + correctUpdate + ' / ' + upDate.getFullYear(); 
+        let Description = document.createElement('p');
+        Description.innerText = 'Description : '+ databaseJson.incidents[index].description;    
+        article.append(title,pStart,pEnd,Description,pUpdate);
         
         futureProjects.append(article);
         

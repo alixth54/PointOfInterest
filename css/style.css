@@ -2,29 +2,35 @@
     font-family: 'Roboto', sans-serif;
     padding: 0;
     margin: 0;
+   
 }
 
 #areaMap {
-    background-color: #eef0d5;
+    background-color: #fafaf8;
     display:flex;
     justify-content: center;
     align-items: flex-start;
     padding: 10px;
     gap: 10px;
+
 }
 
 #map {
-   max-width: 60%;
-   margin: auto;
-   border-radius: 5px;
-    
-
-}
+    max-width: 60%;
+    margin-left: auto;
+    margin-right: auto;
+    border-radius: 5px;
+    max-height: 75vh;
+ 
+ }
 
 #logo img{
     max-width: 40%;
     margin: 30px;
-min-width:250px;
+    min-width:260px;
+
+   
+
 }
 
 .topPages{
@@ -40,27 +46,27 @@ min-width:250px;
     display: flex;
     flex-direction: row;
     margin: auto 50px;
+    color:rgb(61 60 60);
+
 }
 
 #toolBar button{
-background-color: transparent;
-border: none;
-font-size: 20px;
-padding: 0 5px;
-margin: 0px 5px;
+    background-color: transparent;
+    border: none;
+    font-size: 20px;
+    padding: 0 5px;
+    margin: 0px 5px;
+    color:rgb(61 60 60);
 
 }
 
 #toolBar input{
     padding:5px;
-}
-   
-    
-    
 
+}
 
 .cardArticle {
-    border: 1px solid black;
+    border: 1px solid #ff4136;
     border-radius: 5px;
     display: flex;
     flex-direction: column;
@@ -68,31 +74,61 @@ margin: 0px 5px;
     padding: 10px;
     max-width: 60%;
     margin: 20px auto;
+    box-shadow: 4px 4px 4px rgb(255, 66, 56);
+    font-size: 1em;
+    color:rgb(61 60 60);
+}
+
+.cardArticle button{
+background-color: #ff4136;
+border: none;
+border-radius: 5%;
+font-size: 1em;
+box-shadow: 2px 2px 4px black;
+color: white;
 
 }
 
+#titleFuture{
+padding-bottom:15px;
+text-transform: uppercase;
+color:rgb(61 60 60);
+text-shadow: 2px 2px 3px #ffa703 ;
+
+}
 
 .cardButton {
     padding: 10px;
     margin-left: auto;
     margin-right: 0;
+
 }
 
 #futureProjects {
     display: flex;
     flex-wrap: wrap;
     gap: 10px;
-    
+    font-size: 1rem;
+ 
 }
 
 .futureTask {
-    width: 200px;
+    width: 90%;
     max-height: 300px;
-    min-height: 300px;
-    background-color: white;
+    min-height: 140px;
+    border: 1px solid  rgb(255, 168, 5,0.6);
+    background-color:white;
     padding: 10px;
     border-radius: 5px;
-    
+    box-shadow: 4px 4px 4px rgb(255, 168, 5,0.6);
+    font-size: 1em;
+}
+
+.futureTask h3{
+    font-size:1em;
+    padding: 0px 7px 7px;
+    color:rgb(61 60 60);
+
 }
 
 #wrapArticle {
@@ -101,20 +137,101 @@ margin: 0px 5px;
     align-items: center;
     
 }
-/* 
-@media screen and (max-width<=1000px){
+
+#legend{
+    width:100%;
+    padding-left: 10px;
+    
+}
+
+#legend h3{
+    font-size: 0.9em;
+    color:rgb(61 60 60);
+
+}
+
+#legend p{
+    color : rgb(61 60 60);
+    font-size: 1em;
+}
+
+#legend label{
+    color : rgb(61 60 60);
+    font-size: 1em;
+
+}
+
+#legendIcon{
+    display: flex;
+    flex-direction: row;
+    gap: 5px;
+}
+
+#legendIcon img{
+    width: 20px;
+
+}
+
+ footer{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+    padding: 20px;
+/* border:1px solid #ffa703; */
+
+ }
+.author{
+    color:rgb(61 60 60);
+    font-size: 1.1em;
+    text-shadow: 2px 2px 2px #ffa703 ; 
+
+}
+
+#copyright p{
+    color: #ff4136;
+
+}
+
+#contact button{
+    background-color: #ffa703;
+    font-size: 1em;
+    border: none;
+    padding: 5px 15px 5px 15px;
+    border-radius: 5%;
+    box-shadow: 2px 2px 4px black;
+    color: rgb(61 60 60);
+
+}
+
+@media screen and (max-width:1000px){
     #logo img{
         max-width: 50%;
         margin: 30px;
     
-    } */
+    }
 
-/* } */
+    #areaMap {
+        flex-direction: column;
+
+    }
+
+    #map {
+        max-width: 100%;
+        width: 80%;
+       
+         
+     
+     }
+
+ }
 
 @media screen and (max-width:600px) {
     #logo img{
-        width: 200px;
-        margin: 30px;
+       
+        margin:30px 0px 30px 10px;
     
     }
+
+    
+
 }
