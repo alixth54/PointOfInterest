@@ -2,6 +2,7 @@
 let routing;
 let divParent;
 let resetButton;
+let check = 0; 
 
 function changelanguage () { 
     let languageSelection = document.querySelector('input[name=language]:checked').value; 
@@ -12,7 +13,7 @@ function changelanguage () {
 
 
 function createItinerary() {  
-    
+    if (check === 0) { 
     routing = L.Routing.control({
         
         waypoints: [
@@ -55,6 +56,8 @@ function createItinerary() {
         resetButton.addEventListener('click', () => {resetRoute()});
         divParent.classList.add('leaflet-routing-collapsible');
         divParent.append(resetButton);
+        check = 1;
+    }
 }
 
 function resetRoute () {
