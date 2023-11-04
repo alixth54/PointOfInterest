@@ -5,6 +5,7 @@ let endDate, endDay, endMonth, endYear;
 let majDate, majDay, majMonth, majYear;
 const currentDate = new Date(); //date du jour
 let markerGroup; // variable pour creation layer sur leaflet
+let jj, mm, yyyy;
 
 //fetch open data nancy ajout event onload et recuperartion fichier json
 document.addEventListener('DOMContentLoaded', (event) => {
@@ -18,9 +19,13 @@ document.addEventListener('DOMContentLoaded', (event) => {
         for (let i = 0; i<databaseJson.incidents.length;i++) { 
             createMarker(i,databaseJson.incidents[i]);// fonction appeler au demarrage et deja incrementée
             futureEvents(i);
+            
         }
-        
-        
+         jj=currentDate.getDate();
+         mm = currentDate.getMonth()+1;
+         yyyy=currentDate.getFullYear();
+        document.getElementById('date').innerText ='Nous sommes le '+jj+'/'+mm+'/'+yyyy+'.';
+        console.log(currentDate);
     });
 
 });
@@ -69,6 +74,7 @@ function createCard(index) {  //le parametre index est le meme que createMarker 
     let buttonSignal = document.createElement('button');  // on creer un bouton en bas de la card pour appeler un formulaire de contact
     buttonSignal.classList.add('cardButton');           //ajout class='cardButton' au bouton
     buttonSignal.innerText = 'Signaler un problème'; //text visible sur le bouton
+    buttonSignal.addEventListener('click', () => {sendEmail()});
     article.append(title,pStart,pEnd,Description,pUpdate,buttonSignal); //creation de l'element html qui contient les differents elelements creer soit l'article contient le titre le paragraphe, les dates et le bouton
 
     title.innerText ='CHANTIER '+ databaseJson.incidents[index].location.location_description; //insertion text du json dans le titre de la card
@@ -128,18 +134,18 @@ function createMarker (index,coordinates){
                     if(details.toUpperCase().indexOf(arrayRed[j].toUpperCase()) !=-1 ){// on trouve dans le json un mot qui ressemble aux mot du tableau arrayRed alors
                         let markerRed = L.marker([lat, long],{icon:redIcon}).addTo(markerGroup); // on créé le marker rouge et on l'ajout au layer creer ligne44.
                         //creation, sur chaque marker, d'un popup 
-                        markerRed.bindPopup("<strong>CIRCULATION INTERDITE</strong><br> Début chantier: " + startDay + "/" + startMonth + "/" + startYear + "<br> Fin chantier: " + endDay + "/" + endMonth + "/" + endYear + "<br><button onclick=createCard("+index+")> En savoir plus</button>");
+                        markerRed.bindPopup("<strong>CIRCULATION INTERDITE</strong><br> Début chantier: " + startDay + "/" + startMonth + "/" + startYear + "<br> Fin chantier: " + endDay + "/" + endMonth + "/" + endYear + "<br><a href='#"+index+"' ><button onclick=createCard("+index+")> En savoir plus</button></a>");
                         j = arrayRed.length; //pour eviter la creation d'un double marker car parfois la route peut etre barrée et le stationnement interdit donc on arrete la boucle une fois le mot trouvé
 
                     }else if(details.toUpperCase().indexOf(arrayOrange[j].toUpperCase()) !=-1 ){
                     let markerOrange = L.marker([lat, long],{icon:orangeIcon}).addTo(markerGroup);
-                    markerOrange.bindPopup("<strong>CIRCULATION LENTE</strong><br> Début chantier: " + startDay + "/" + startMonth + "/" + startYear + "<br> Fin chantier: " + endDay + "/" + endMonth + "/" + endYear + "<br><button onclick=createCard("+index+")> En savoir plus</button>");
+                    markerOrange.bindPopup("<strong>CIRCULATION LENTE</strong><br> Début chantier: " + startDay + "/" + startMonth + "/" + startYear + "<br> Fin chantier: " + endDay + "/" + endMonth + "/" + endYear + "<br><a href='#"+index+"' ><button onclick=createCard("+index+")> En savoir plus</button></a>");
                         j=arrayRed.length;
                     }else if
                     (details.toUpperCase().indexOf(arrayBlue[j].toUpperCase()) !=-1 )
                     {
                         let markerBlue = L.marker([lat, long],{icon:blueIcon}).addTo(markerGroup);
-                        markerBlue.bindPopup("<strong>PROBLEME STATIONNEMENT</strong><br> Début chantier: " + startDay + "/" + startMonth + "/" + startYear + "<br> Fin chantier: " + endDay + "/" + endMonth + "/" + endYear + "<br><button onclick=createCard("+index+")> En savoir plus</button>");
+                        markerBlue.bindPopup("<strong>PROBLEME STATIONNEMENT</strong><br> Début chantier: " + startDay + "/" + startMonth + "/" + startYear + "<br> Fin chantier: " + endDay + "/" + endMonth + "/" + endYear + "<br><a href='#"+index+"' ><button onclick=createCard("+index+")> En savoir plus</button></a>");
                         j=arrayRed.length;
                     }
             }
@@ -238,4 +244,11 @@ function futureEvents(index){
         
     }
 
+}
+
+function sendEmail(){
+let email = "thesealix@yahoo.fr";
+let subject = "Nous signaler un problème";
+let content = "Vous avez une remarque, ou autre, à faire sur les travaux, dites-nous tout.";
+window.open(`mailto:${email}?subject=${subject}&body=${content}`);
 }

@@ -5,29 +5,10 @@
    
 }
 
-#areaMap {
-    background-color: #fafaf8;
-    display:flex;
-    justify-content: center;
-    align-items: flex-start;
-    padding: 10px;
-    gap: 10px;
-
-}
-
-#map {
-    max-width: 60%;
-    margin-left: auto;
-    margin-right: auto;
-    border-radius: 5px;
-    max-height: 75vh;
- 
- }
-
 #logo img{
     max-width: 40%;
     margin: 30px;
-    min-width:260px;
+    min-width:150px;
 
    
 
@@ -65,18 +46,90 @@
 
 }
 
+#itinerary{
+    width:100%;
+    padding-left: 10px;
+    
+}
+
+#date{
+    float: right;
+    padding-right: 15px;
+
+}
+
+#itinerary h3{
+    font-size: 1em;
+    color:rgb(61 60 60);
+    font-weight: bold;
+
+}
+
+#itinerary p{
+    color : rgb(61 60 60);
+    font-size: 1em;
+}
+
+#itinerary label{
+    color : #3d3c3c;
+    font-size: 1em;
+
+}
+
+#legendIcon{
+    display: flex;
+    flex-direction: row;
+    gap: 5px;
+
+}
+
+#legendIcon img{
+    width: 25px;
+    height: 25px;
+
+}
+
+#map {
+    max-width: 90%;
+    margin-left: auto;
+    margin-right: auto;
+    height: 75vh;
+    padding: 20px;
+
+ }
+
+#areaMap {
+    background-color: #fafaf8;
+   display: flex;
+   flex-direction: row;
+    padding: 10px;
+    gap: 10px;
+
+}
+
+#cardMap{
+width:100%;
+
+}
+
+
+
 .cardArticle {
     border: 1px solid #ff4136;
     border-radius: 5px;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
     padding: 10px;
     max-width: 60%;
     margin: 20px auto;
     box-shadow: 4px 4px 4px rgb(255, 66, 56);
     font-size: 1em;
     color:rgb(61 60 60);
+    
+}
+
+.cardArticle h3{
+font-size: 1.3rem;
+font-weight: bold;
+
 }
 
 .cardArticle button{
@@ -86,14 +139,15 @@ border-radius: 5%;
 font-size: 1em;
 box-shadow: 2px 2px 4px black;
 color: white;
+margin-bottom: 30px;
+padding: 5px;
 
 }
 
-#titleFuture{
-padding-bottom:15px;
-text-transform: uppercase;
-color:rgb(61 60 60);
-text-shadow: 2px 2px 3px #ffa703 ;
+#wrapArticle {
+    width: 70%;
+    margin-left: auto;
+    margin-right: auto;
 
 }
 
@@ -104,9 +158,17 @@ text-shadow: 2px 2px 3px #ffa703 ;
 
 }
 
+#titleFuture{
+padding-bottom:15px;
+text-transform: uppercase;
+color:rgb(61 60 60);
+text-shadow: 2px 2px 3px #ffa703 ;
+font-size: 2rem;
+font-weight: bold;
+
+}
+
 #futureProjects {
-    display: flex;
-    flex-wrap: wrap;
     gap: 10px;
     font-size: 1rem;
  
@@ -122,53 +184,15 @@ text-shadow: 2px 2px 3px #ffa703 ;
     border-radius: 5px;
     box-shadow: 4px 4px 4px rgb(255, 168, 5,0.6);
     font-size: 1em;
+    margin-bottom: 20px;
+
 }
 
 .futureTask h3{
     font-size:1em;
     padding: 0px 7px 7px;
     color:rgb(61 60 60);
-
-}
-
-#wrapArticle {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    
-}
-
-#legend{
-    width:100%;
-    padding-left: 10px;
-    
-}
-
-#legend h3{
-    font-size: 0.9em;
-    color:rgb(61 60 60);
-
-}
-
-#legend p{
-    color : rgb(61 60 60);
-    font-size: 1em;
-}
-
-#legend label{
-    color : rgb(61 60 60);
-    font-size: 1em;
-
-}
-
-#legendIcon{
-    display: flex;
-    flex-direction: row;
-    gap: 5px;
-}
-
-#legendIcon img{
-    width: 20px;
+    font-weight: bold;
 
 }
 
@@ -177,7 +201,10 @@ text-shadow: 2px 2px 3px #ffa703 ;
     flex-direction: row;
     justify-content: space-around;
     padding: 20px;
-/* border:1px solid #ffa703; */
+    margin-top: 50px;
+    z-index: 1000;
+    background-color: white;
+    
 
  }
 .author{
@@ -203,6 +230,35 @@ text-shadow: 2px 2px 3px #ffa703 ;
 
 }
 
+.btnForm{
+margin-right: 10px;
+padding: 5px 15px 5px 15px;
+border-radius: 15px;
+background-color: #3d3c3c;
+border: 2px solid #ffa703;
+color: #ffa703;
+box-shadow: 2px 2px 3px #ff4136;
+}
+
+.container{
+    border: 2px solid #ff4136;
+    border-radius: 15px;
+    box-shadow: 3px 3px 5px #ff4136;
+    color: #3d3c3c;
+    padding: 15px;
+    margin-bottom: 6%;
+    background-color:rgb(62, 61, 61, 0.2);
+}
+
+.input{
+    border-radius: 15px;
+    border: 1px solid #ffa703;
+background-color:white;
+padding-left: 10px ;
+
+}
+
+
 @media screen and (max-width:1000px){
     #logo img{
         max-width: 50%;
@@ -219,19 +275,104 @@ text-shadow: 2px 2px 3px #ffa703 ;
         max-width: 100%;
         width: 80%;
        
-         
-     
      }
+
+     footer{
+        margin-top: 20px;
 
  }
 
+ #map {
+    height: 57vh;
+    padding: 20px;
+
+ }
+
+ #futureProjects {
+    font-size: 0.95rem;
+ 
+}
+
+.futureTask h3{
+    font-size:1em;
+    
+
+}
+
+#titleFuture{
+    font-size: 1.7rem;
+    
+    }
+
+    #itinerary h3{
+        font-size: 0.9em;
+        
+    }
+
+    #itinerary p{
+        font-size: 0.9em;
+
+    }
+
+    #itinerary label{
+        font-size:0.9em;
+    
+    }
+
+    .cardArticle h3{
+        font-size: 0.9rem;
+        
+        }
+
+}
+
 @media screen and (max-width:600px) {
     #logo img{
-       
         margin:30px 0px 30px 10px;
     
     }
 
-    
+    #map {
+        max-height: 50vh;
+       
+     }
 
+     #legendIcon img{
+        width: 20px;
+        height: 20px;
+    
+    }
+
+    .cardArticle h3{
+        font-size: 0.9rem;
+        
+    }
+
+    .cardArticle {
+        font-size: 0.8em;
+        
+    }
+
+    .futureTask h3{
+        font-size:0.9em;
+    
+    }
+
+    #titleFuture{
+    font-size: 1.4rem;
+    
+    }
+
+    #itinerary h3{
+        font-size: 0.9em;
+    
+    }
+    #itinerary p{
+        font-size: 0.8em;
+    }
+
+    #itinerary label{
+        font-size: 0.8em;
+    
+    }
 }
