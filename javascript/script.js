@@ -210,6 +210,9 @@ function searching(){
        
     }   
    }
+function clearSearch(){
+    document.getElementById('searchBar').value= document.getElementById('searchBar').defaultValue;
+}
 
 function reset() {
     document.getElementById('listSearch').innerHTML = '';
